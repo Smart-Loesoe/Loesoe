@@ -1,0 +1,13 @@
+﻿services:
+  web:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile
+      args:
+        VITE_API_BASE: "http://localhost:8000"
+        WEB_DIR: "web"
+    ports:
+      - "5174:3000"
+    depends_on:
+      api:
+        condition: service_healthy

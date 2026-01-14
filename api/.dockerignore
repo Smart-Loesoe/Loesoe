@@ -1,0 +1,29 @@
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pkl
+*.log
+
+# Virtual environments
+.env
+.venv
+venv/
+ENV/
+
+# Pytest cache
+.pytest_cache/
+
+# Build/packaging
+*.egg-info
+.eggs
+dist
+build
+
+# Jupyter notebooks (als je die lokaal hebt)
+.ipynb_checkpoints/
+
+# Git
+.git
+.gitignore

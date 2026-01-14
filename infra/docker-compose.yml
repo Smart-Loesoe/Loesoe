@@ -1,0 +1,107 @@
+﻿x-envfile:
+  env_file: &id003
+  - ../../.env
+  - ./.env
+x-health-api:
+  healthcheck: &id002
+    test:
+    - CMD
+    - wget
+    - -qO-
+    - http://127.0.0.1:8000/healthz
+    interval: 10s
+    timeout: 3s
+    retries: 10
+x-health-web:
+  healthcheck: &id004
+    test:
+    - CMD
+    - wget
+    - -qO-
+    - http://127.0.0.1
+    interval: 10s
+    timeout: 3s
+    retries: 10
+x-health-db:
+  healthcheck: &id001
+    test:
+    - CMD-SHELL
+    - pg_isready -U ${POSTGRES_USER:-loesoe} -d ${POSTGRES_DB:-loesoe}
+    interval: 10s
+    timeout: 5s
+    retries: 10
+services:
+  db:
+    healthcheck: *id001
+    container_name: loesoe-db
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-loesoe}
+      POSTGRES_USER: ${POSTGRES_USER:-loesoe}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-loesoe}
+    ports:
+    - 5432:5432
+    volumes:
+    - db-data:/var/lib/postgresql/data
+    networks:
+    - loesoe-net
+  api:
+    healthcheck: *id002
+    env_file: *id003
+    container_name: loesoe-api
+    build:
+      context: ..
+      dockerfile: infra/api.Dockerfile
+    environment:
+      UPLOADS_DIR: /app/uploads
+      DATABASE_URL: postgresql://${POSTGRES_USER:-loesoe}:${POSTGRES_PASSWORD:-loesoe}@db:5432/${POSTGRES_DB:-loesoe}
+    volumes:
+    - ../../data/uploads:/app/uploads
+    - C:\Loesoe\data\uploads:/app/uploads
+    ports:
+    - 8000:8000
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+    - loesoe-net
+  web:
+    healthcheck: *id004
+    env_file: *id003
+    container_name: loesoe-web
+    build:
+      context: ../../web
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE: ${VITE_API_BASE:-http://localhost:8000}
+    environment:
+      VITE_API_BASE: ${VITE_API_BASE:-http://localhost:8000}
+    ports:
+    - ${WEB_PORT:-5173}:80
+    - 5173:5173
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+    - loesoe-net
+  pgadmin:
+    container_name: loesoe-pgadmin
+    profiles:
+    - pgadmin
+    image: dpage/pgadmin4:8.11
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@local}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+    ports:
+    - 5050:80
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+    - loesoe-net
+volumes:
+  db-data: null
+  db_data: null
+networks:
+  loesoe-net:
+    driver: bridge

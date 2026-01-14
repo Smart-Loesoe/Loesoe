@@ -1,0 +1,20 @@
+# Hou rommel eruit, maar laat onze code toe
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+.env
+.env.*
+node_modules
+dist
+build
+
+# ⬇️ heel belangrijk: whitelist de app-mappen
+!loesoe/**
+!api/**
+
+# Ook compose/dockerfiles toelaten
+!docker-compose.yml
+!api.Dockerfile
+!Dockerfile

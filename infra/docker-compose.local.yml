@@ -1,0 +1,19 @@
+﻿services:
+  api:
+    environment:
+      - CORS_ALLOW_ORIGINS=http://localhost:5174,http://127.0.0.1:5174
+      - CORS_ORIGINS=http://localhost:5174,http://127.0.0.1:5174
+
+  web:
+    container_name: loesoe-web
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile
+      args:
+        VITE_API_BASE: "http://localhost:8000"
+        WEB_DIR: "web"
+    ports:
+      - "5174:3000"
+    depends_on:
+      api:
+        condition: service_healthy

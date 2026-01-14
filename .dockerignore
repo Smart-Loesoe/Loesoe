@@ -1,0 +1,20 @@
+﻿.git
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.log
+.venv/
+env/
+dist/
+build/
+.coverage
+.pytest_cache/
+# frontend spul
+web/node_modules
+web/.vite
+web/dist
+# runtime data die je als volume wilt mounten
+data/
+uploads/
+logboek/

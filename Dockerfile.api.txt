@@ -1,0 +1,43 @@
+# === Loesoe API Dockerfile (FastAPI) ===
+# Robust build that works with or without requirements.txt
+
+FROM python:3.11-slim
+
+WORKDIR /app
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    TZ=Europe/Amsterdam
+
+# System deps (build tools for psycopg/cryptography if needed)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy source first so we can still install if requirements.txt doesn't exist
+COPY api/ /app/
+
+# Install deps: prefer requirements.txt if present, otherwise install a sane default set
+RUN python -m pip install --upgrade pip && \
+    if [ -f "requirements.txt" ]; then \
+        pip install -r requirements.txt; \
+    else \
+        pip install \
+            fastapi \
+            "uvicorn[standard]" \
+            "sqlalchemy[asyncio]" \
+            asyncpg \
+            "python-jose[cryptography]" \
+            "passlib[bcrypt]" \
+            pydantic \
+            aiofiles \
+            python-multipart; \
+    fi
+
+EXPOSE 8000
+
+# Start the API
+# If your FastAPI app is not main:app, change this accordingly.
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

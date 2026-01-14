@@ -1,0 +1,66 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+
+# =========================
+# Environment / secrets
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Runtime data & logs
+# =========================
+data/
+logs/
+*.log
+last_response.json
+
+# =========================
+# Node / Frontend
+# =========================
+node_modules/
+web/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build output (frontend)
+web/dist/
+web/.vite/
+
+# =========================
+# Docker
+# =========================
+*.bak
+*.patched
+docker-compose.patched*.yml
+docker-compose.override.yml
+
+# =========================
+# OS / Editor
+# =========================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# =========================
+# Tests / temp / archives
+# =========================
+tests/__pycache__/
+_archive_old/
+
+# =========================
+# Misc
+# =========================
+*.tmp
+*.swp

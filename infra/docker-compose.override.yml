@@ -1,0 +1,31 @@
+﻿services:
+  api:
+    build:
+      context: ..                 # C:\Loesoe\loesoe (repo-root)
+      dockerfile: infra/api.Dockerfile
+    environment:
+      - UPLOADS_DIR=/app/uploads
+      - SIGNING_SECRET=dev-secret
+      - CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
+    volumes:
+      - C:\Loesoe\data\uploads:/app/uploads
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/healthz', timeout=2).getcode()==200 else 1)\""]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
+  web:
+    # Je bestaande web-config hier; belangrijk is dat build ARG VITE_API_BASE goed staat
+    build:
+      context: ../web            # pas dit aan naar jouw web-map
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_BASE=http://api:8000   # web build praat naar containernaam 'api'
+    environment:
+      - VITE_API_BASE=http://api:8000
+    depends_on:
+      - api
+    ports:
+      - "5173:3000"   # of 80:80 als je 'serve' gebruikt; laat zoals je eerder had

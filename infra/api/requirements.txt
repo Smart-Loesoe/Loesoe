@@ -1,0 +1,7 @@
+﻿fastapi
+uvicorn[standard]
+python-multipart
+pydantic
+itsdangerous
+python-dotenv
+requests
