@@ -10,7 +10,9 @@ Loesoe is een volledig zelfgebouwd, lokaal draaiend AI-platform.
 Het is ontworpen als professionele AI-infrastructuur waarop meerdere eindproducten kunnen draaien, zoals een persoonlijke AI-buddy, developer assistant, app generator, gezins- en kindermodus en bedrijfs- of gemeentetoepassingen.
 
 Loesoe is expliciet, voorspelbaar en debugbaar.
-Geen hobbyproject. Geen ChatGPT-wrapper. Geen black box.
+Geen hobbyproject.
+Geen ChatGPT-wrapper.
+Geen black box.
 
 Kernprincipes
 
@@ -72,14 +74,15 @@ Invoke-RestMethod "http://localhost:8000/healthz
 Projectstructuur (actueel)
 
 C:\Loesoe\loesoe
+
 docker-compose.yml
 Dockerfile.api
 .env.example
 README.md
 
-api\
-web\
-data\
+api
+web
+data
 
 Learning en ML status
 
