@@ -1,123 +1,141 @@
-Loesoe is a full-stack AI assistant built by Richard van Olst.
-The project combines speech, memory, a web interface, and GPT-5 intelligence into one integrated assistant.
+Loesoe
 
-🧩 Built with:
+Versie: v6.9
+Laatste update: 13 januari 2026
+Status: core stabiel, events en learning actief, fase 23.4 afgerond, architectuur bevroren
 
-FastAPI (async backend)
+Wat is Loesoe
 
-React (Vite) frontend
+Loesoe is een volledig zelfgebouwd, lokaal draaiend AI-platform.
+Het is ontworpen als professionele AI-infrastructuur waarop meerdere eindproducten kunnen draaien, zoals een persoonlijke AI-buddy, developer assistant, app generator, gezins- en kindermodus en bedrijfs- of gemeentetoepassingen.
 
-PostgreSQL database
+Loesoe is expliciet, voorspelbaar en debugbaar.
+Geen hobbyproject. Geen ChatGPT-wrapper. Geen black box.
 
-Docker Compose environment
+Kernprincipes
 
-JWT authentication + multi-user isolation
+Modulair en uitbreidbaar
+Docker-native
+Stateless containers
+Alle data via volumes en lokaal zichtbaar op Windows
+.env is de enige bron van waarheid
+Geen hardcoded secrets
+Geen overrides in docker-compose.yml
+/healthz is de enige waarheid over status
+Geen impliciete defaults
+Geen magische fallback-logica
+Geen verborgen state
 
-GPT-5 integration via OpenAI API
+Actuele functionaliteit
 
-💡 About the project
+Realtime GPT-chat met SSE streaming
+Model-router via /model/chat met legacy compat via /chat en /chat/send
+GPT-5 project-scoped API-keys
+Zelflerend geheugen v2
+PostgreSQL met pgvector
+Retrieval met system-level prompt injectie
+Websearch via SerpAPI
+Auth demo in-memory met bearer tokens
+React dashboard
+Uploads en documentverwerking
+Feature flags en PRO-mode
+Learning events ingest
+Patterns opslag in database
+Deterministische ML-laag (read-only)
 
-Loesoe began in May 2025 as a personal hobby project and has grown into a complete AI system.
-Everything was developed from scratch — without formal education — driven purely by passion for AI, Python, and automation.
-The goal is to create a personal digital assistant and learning platform.
+Architectuur
 
-🧠 Key features
+Docker Compose is verplicht.
+Containers zijn stateless.
+Alle data leeft in bind mounts of volumes.
 
-✅ GPT-5 chat with streaming
-✅ Async PostgreSQL database (asyncpg)
-✅ JWT authentication + user isolation
-✅ Secure uploads with signed links
-✅ Real-time SSE streaming
-✅ Multi-model router (GPT-5)
+Browser
+Web (React/Vite) op poort 5173
+API (FastAPI) op poort 8000
+PostgreSQL met pgvector op poort 5432
 
-🧱 Phase roadmap
-Phase	Component	Status
-1-14	Core, Memory, Prefs, Chat	✅ Completed
-15	Uploads + Signed Links	✅
-16	Streaming (SSE)	✅
-17	GPT-5 Model Integration	✅
-18	Auth & Multi-User	✅
-19-21	Buddy, Memory, Finance	🚧 In development
-⚙️ Run locally
+Config-regels
+
+.env is leidend
+Secrets staan niet in code
+Geen secrets of overrides in docker-compose.yml
+Bij wijziging van database-credentials altijd docker compose down -v
+
+Opstarten (Windows PowerShell)
+
+cd C:\Loesoe\loesoe
 docker compose up -d
+docker ps
+Invoke-RestMethod "http://localhost:8000/healthz
+" | ConvertTo-Json -Depth 10
 
+Projectstructuur (actueel)
 
-Access:
-🖥️ http://localhost:5173
- → Web interface
-⚙️ http://localhost:8000
- → API server
+C:\Loesoe\loesoe
+docker-compose.yml
+Dockerfile.api
+.env.example
+README.md
 
-📩 Contact
+api\
+web\
+data\
 
-For collaboration, technical contributions or licensing inquiries:
-📧 Connect via LinkedIn ( https://www.linkedin.com/in/richard-van-olst-558188367/ )
-.
+Learning en ML status
 
-© 2025 Richard van Olst – Smart Loesoe.
+Fase 23.1 events ingest afgerond
+Fase 23.2 patterns en database afgerond
+Fase 23.3 read-only impact afgerond
+Fase 23.4 deterministische ML-laag afgerond
 
+ML-eigenschappen
 
+Read-only
+Uitlegbaar
+Opt-in
+Geen automatische acties
 
+Sequenties
 
+Loesoe krijgt nooit macht vóór controle.
 
-# Loesoe
-Full-stack AI-assistent gebouwd met FastAPI · React · PostgreSQL · Docker · GPT-5
+De volgorde is:
+zien via events en data
+begrijpen via patterns en ML (read-only)
+controleren via models en providers
+beveiligen via rechten en sandbox
+bouwen via tools en generators
 
-# 🤖 Loesoe – Persoonlijke AI-assistent
+Acties en automatisering pas later.
 
-**Loesoe** is een full-stack AI-assistent gebouwd door **Richard van Olst**.  
-De applicatie combineert spraak, geheugen, webinterface en GPT-5-intelligentie in één platform.
+Roadmap (leidend, tot en met fase 24)
 
-🧩 Gebouwd met:
-- **FastAPI** (async backend)
-- **React (Vite)** frontend
-- **PostgreSQL** database
-- **Docker Compose** omgeving
-- **JWT-authenticatie + multi-user isolatie**
-- **GPT-5 integratie via OpenAI API**
+Fase 20 zelflerend geheugen v1 afgerond
+Fase 21 streaming en PRO-mode afgerond
+Fase 22 geheugen v2 afgerond
+Fase 23 learning en observability afgerond t/m 23.4
 
----
+Fase 23.3 polish UI en UX gepland
 
-## 💡 Over het project
-Loesoe is in mei 2025 gestart als hobbyproject en sindsdien uitgegroeid tot een volledig functionerend AI-systeem.  
-Alles is zelf ontwikkeld, zonder formele opleiding — puur door passie voor AI, Python en automatisering.  
-Het project is bedoeld als leertraject én als persoonlijke digitale assistent.
+Fase 24 model en provider manager
 
----
+Fase 24.1 model registry skeleton
+Registry voor GPT-modellen en search providers
+Versies en metadata
+Health hooks read-only
+Nog geen gedragseffect
 
-## 🧠 Belangrijkste functies
-✅ GPT-5 chat met streaming  
-✅ Async database (PostgreSQL + asyncpg)  
-✅ JWT-authenticatie + user-isolatie  
-✅ Uploads + signed links  
-✅ Live SSE-streaming  
-✅ Multi-model router (Groq / GPT-5)  
+Fase 24.2 search provider control
+SerpAPI expliciet als provider
+Providerstatus beschikbaar, quota_exceeded of disabled
+Rustige fallback zonder spam
+Dashboard-status zichtbaar
+Voorbereid op vervanging door Bing, Brave of lokale search
 
----
+Stop- en startpunt
 
-## 🧱 Fase-overzicht
-| Fase | Onderdeel | Status |
-|------|------------|--------|
-| 1-14 | Basis, Memory, Prefs, Chat | ✅ Voltooid |
-| 15 | Uploads + Signed Links | ✅ |
-| 16 | Streaming (SSE) | ✅ |
-| 17 | Model-integratie (GPT-5) | ✅ |
-| 18 | Auth & Multi-User | ✅ |
-| 19-21 | Buddy, Geheugen, Financiën | 🚧 Komt eraan |
+Gestopt bij fase 23.4 deterministische ML-laag
+Volgende stap is fase 24.1 model registry skeleton
 
----
-
-## ⚙️ Opstarten
-```bash
-docker compose up -d
-
-App draait dan op:
-🖥️ http://localhost:5173 (web)
-⚙️ http://localhost:8000 (API)
-
-📩 Contact
-
-Bij interesse in samenwerking, technische uitbreiding of licentie:
-📧 Neem gerust contact op via GitHub of LinkedIn.( https://www.linkedin.com/in/richard-van-olst-558188367/ )
-
-© 2025 Richard van Olst – Smart Loesoe.
+Startzin volgende sessie:
+Loesoe time start fase 24.1 model registry skeleton
